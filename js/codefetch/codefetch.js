@@ -1,25 +1,41 @@
-(function(jQury) {
-    $.fn.codefetch = function(user, repos, path, lang) {
-        var _this = this;
-        var url = "https://api.github.com/repos/" + user + "/" + repos + "/contents/" + path
+var codefetchId;
+var codefetchLang;
 
+function codefetchAddContent(id, content) {
+    content = content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    $("#" + id).append(content);
+    $("#" + id).attr("class", "brush:" + codefetchLang);
+}
+
+function codefetchJSONPCallback(json) {
+    codefetchAddContent(codefetchId, window.atob(json.data.content.replace(/\n/g, "")));
+}
+
+(function(jQury) {
+    $.fn.codefetch2 = function(url) {
+        var _this = this;
         $.ajax({
             url: url,
             async: false,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader("Accept", "application/vnd.github.beta.raw");
-            },
+            dataType: text,
             success: function(content) {
-                content = content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                _this.append(content);
-                _this.attr("class", "brush:" + lang);
+                codefetchAddContent(_this.attr("id"), content);
             },
             error: function() {
                 _this.append("Can't retrieve from " + url);
                 _this.attr("class", "brush:" + lang);
             }
         });    
+    }
 
+    $.fn.codefetch = function(user, repos, path, lang) {
+        codefetchId = this.attr("id");
+        codefetchLang = lang;
+        var url = "https://api.github.com/repos/" + user + "/" + repos + "/contents/" + path + "?callback=codefetchJSONPCallback";
+        var script = "<script type=\"text/javascript\" src=\"";
+        script += url;
+        script += "\"></script>";
+        this.after(script);
     }
 
 })(jQuery);
