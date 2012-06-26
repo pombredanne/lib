@@ -4,7 +4,9 @@ var codefetchLang;
 function codefetchAddContent(id, content) {
     content = content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     $("#" + id).append(content);
-    $("#" + id).attr("class", "brush:" + codefetchLang);
+    if (codefetchLang != null) {
+        $("#" + id).attr("class", "brush:" + codefetchLang);
+    }
 }
 
 function codefetchJSONPCallback(json) {
