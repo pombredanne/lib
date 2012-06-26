@@ -12,29 +12,16 @@ function codefetchJSONPCallback(json) {
 }
 
 (function(jQury) {
-    $.fn.codefetch2 = function(url) {
-        var _this = this;
-        $.ajax({
-            url: url,
-            async: false,
-            dataType: text,
-            success: function(content) {
-                codefetchAddContent(_this.attr("id"), content);
-            },
-            error: function() {
-                _this.append("Can't retrieve from " + url);
-                _this.attr("class", "brush:" + lang);
-            }
-        });    
-    }
-
-    $.fn.codefetch = function(user, repos, path, lang) {
+    jQuery.fn.codefetch = function(user, repos, path, lang) {
         codefetchId = this.attr("id");
         codefetchLang = lang;
+
         var url = "https://api.github.com/repos/" + user + "/" + repos + "/contents/" + path + "?callback=codefetchJSONPCallback";
+
         var script = "<script type=\"text/javascript\" src=\"";
         script += url;
         script += "\"></script>";
+
         this.after(script);
     }
 
