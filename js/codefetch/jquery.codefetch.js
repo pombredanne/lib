@@ -19,10 +19,7 @@ function codefetchJSONPCallback(json) {
         codefetchLang = lang;
 
         var url = "https://api.github.com/repos/" + user + "/" + repos + "/contents/" + path + "?callback=codefetchJSONPCallback";
-
-        var script = "<script type=\"text/javascript\" src=\"";
-        script += url;
-        script += "\"></script>";
+        var script = "<script type=\"text/javascript\" src=\"" + url + "\"></script>";
 
         this.after(script);
     }
